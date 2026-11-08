@@ -30,3 +30,11 @@
 
 - 每完成一个功能，**先运行 `npm run build` 确认静态构建通过**，再进行下一步开发。
 - 构建失败必须修复后才能继续；不允许把构建错误留到后面。
+
+## 5. 导航必须 base 化（子路径部署铁律）
+
+- 本应用部署在 `https://creep-1.github.io/raystodo/` 子路径下，**所有程序化导航和链接必须经过 `$app/paths` 的 `resolve()`**：
+  - `goto(resolve('/login'))` ✅
+  - `goto('/login')` ❌ —— 绝对路径会被解析到 origin 根（`https://creep-1.github.io/login`），绕过 base，抛 `navigation_route_missing` 导致白屏
+- `<a href>` 指向站内路由时同理：使用 `resolve()` 生成 href，或用相对路径，**禁止裸写 `href="/..."`**。
+- 原因：`new URL('/x', baseURI)` 中以 `/` 开头的路径相对 origin 解析而非当前目录，base 的路径部分会被忽略。
