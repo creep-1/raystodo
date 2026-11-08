@@ -1,5 +1,5 @@
 import type { Session } from '@supabase/supabase-js';
-import { browser } from '$app/env';
+import { browser, building } from '$app/env';
 import { getSupabaseBrowserClient } from '#lib/supabase/client';
 
 class AuthState {
@@ -7,8 +7,8 @@ class AuthState {
 	loading = $state(true);
 
 	constructor() {
-		// 预渲染阶段（服务端）不初始化，仅在浏览器中运行
-		if (!browser) return;
+		// 预渲染与构建阶段不初始化，仅在浏览器中运行
+		if (building || !browser) return;
 		const supabase = getSupabaseBrowserClient();
 		supabase.auth.getSession().then(({ data }) => {
 			this.session = data.session;

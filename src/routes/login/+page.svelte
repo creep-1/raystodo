@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { auth } from '#lib/auth.svelte';
 
 	let email = $state('');
@@ -10,7 +11,7 @@
 
 	$effect(() => {
 		if (!auth.loading && auth.session) {
-			goto('/', { replaceState: true });
+			goto(resolve('/'), { replaceState: true });
 		}
 	});
 
@@ -29,7 +30,7 @@
 				return;
 			}
 			if (data.session) {
-				goto('/', { replaceState: true });
+				goto(resolve('/'), { replaceState: true });
 			} else {
 				notice = '确认邮件已发送，请查收邮箱完成验证后登录。';
 			}
@@ -40,7 +41,7 @@
 				error = err.message;
 				return;
 			}
-			goto('/', { replaceState: true });
+			goto(resolve('/'), { replaceState: true });
 		}
 	}
 </script>
